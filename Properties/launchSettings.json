@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SharpCompare": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
