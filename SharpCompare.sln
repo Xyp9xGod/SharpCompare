@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCompare", "SharpCompare.csproj", "{151AABE0-C13D-4054-84A9-1200BE47BD09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCompare.Benchmarks", "..\SharpCompare.Benchmarks\SharpCompare.Benchmarks.csproj", "{A24CAD88-DE23-4AEB-B3C0-F4F4B8EC3680}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCompare.Tests", "..\SharpCompare.Tests\SharpCompare.Tests.csproj", "{A901EABD-F26B-414B-A314-6CACFA1B482C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{151AABE0-C13D-4054-84A9-1200BE47BD09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{151AABE0-C13D-4054-84A9-1200BE47BD09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{151AABE0-C13D-4054-84A9-1200BE47BD09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A24CAD88-DE23-4AEB-B3C0-F4F4B8EC3680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A24CAD88-DE23-4AEB-B3C0-F4F4B8EC3680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A24CAD88-DE23-4AEB-B3C0-F4F4B8EC3680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A24CAD88-DE23-4AEB-B3C0-F4F4B8EC3680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A901EABD-F26B-414B-A314-6CACFA1B482C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A901EABD-F26B-414B-A314-6CACFA1B482C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A901EABD-F26B-414B-A314-6CACFA1B482C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A901EABD-F26B-414B-A314-6CACFA1B482C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
