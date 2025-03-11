@@ -7,6 +7,16 @@
     <Nullable>enable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+
+	<PackageId>SharpCompare</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>Arilson Silva; Xyp9xGod</Authors>
+	<Company>SharpCompare</Company>
+	<Description>Compare Objects</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<RepositoryUrl>https://github.com/Xyp9xGod/SharpCompare</RepositoryUrl>
+	<PackageProjectUrl>https://www.nuget.org/packages/SharpCompare</PackageProjectUrl>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
