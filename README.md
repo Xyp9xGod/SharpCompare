@@ -34,12 +34,12 @@ A lightweight and efficient library for deep object comparison in C#, designed t
 
 Install via **NuGet Package Manager**:
 ```sh
-PM> NuGet\Install-Package SharpCompare -Version 1.0.1
+PM> NuGet\Install-Package SharpCompare -Version 1.0.2
 ```
 
 Or using the **.NET CLI**:
 ```sh
-dotnet add package SharpCompare --version 1.0.1
+dotnet add package SharpCompare --version 1.0.2
 ```
 
 ---
