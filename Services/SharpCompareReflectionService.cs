@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SharpCompare.Services
 {
-    public class ReflectionCompareService : ISharpCompare
+    public class SharpCompareReflectionService : ISharpCompare
     {
         public bool IsEqual(object firstObject, object secondObject)
         {

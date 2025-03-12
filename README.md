@@ -21,7 +21,7 @@ A lightweight and efficient library for deep object comparison in C#, designed t
 
 ---
 
-## � Features
+## 🚀 Features
 - **Deep Object Comparison**: Recursively compare nested properties and fields.
 - **Collection Support**: Works with `IEnumerable`, arrays, dictionaries, and more.
 - **Custom Ignore Rules**: Use `[IgnoreComparison]` to exclude properties.
@@ -51,7 +51,7 @@ Compare two objects by value:
 ```csharp
 using SharpCompare;
 
-var comparer = new SharpCompareService();
+var comparer = SharpCompareFactory.Create();
 
 var obj1 = new { Name = "Alice", Age = 30 };
 var obj2 = new { Name = "Alice", Age = 30 };
@@ -62,6 +62,8 @@ bool isEqual = comparer.IsEqual(obj1, obj2); // Returns true
 ### Ignoring Specific Properties
 Mark properties to ignore with `[IgnoreComparison]`:
 ```csharp
+using SharpCompare;
+
 public class User
 {
     public string Name { get; set; }
@@ -73,13 +75,15 @@ public class User
 var user1 = new User { Name = "Alice", SessionId = Guid.NewGuid() };
 var user2 = new User { Name = "Alice", SessionId = Guid.NewGuid() };
 
-var comparer = new SharpCompareService();
+var comparer = SharpCompareFactory.Create();
 bool result = comparer.IsEqual(user1, user2); // true (SessionId is ignored)
 ```
 
 ### Comparing Collections
 Compare lists, dictionaries, and other collections:
 ```csharp
+var comparer = SharpCompareFactory.Create();
+
 var dict1 = new Dictionary<int, string> { { 1, "A" }, { 2, "B" } };
 var dict2 = new Dictionary<int, string> { { 1, "A" }, { 2, "B" } };
 
@@ -99,22 +103,36 @@ dotnet add package BenchmarkDotNet
 2. Create a benchmark class:
 ```csharp
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 using SharpCompare;
 
 public class ComparisonBenchmark
 {
-    private readonly SharpCompareService _comparer = new();
-    private readonly object _objA = new { Data = new List<int> { 1, 2, 3 } };
-    private readonly object _objB = new { Data = new List<int> { 1, 2, 3 } };
+    private readonly ISharpCompare _dfsComparer = SharpCompareFactory.Create(useDFS: true);
+    private readonly ISharpCompare _reflectionComparer = SharpCompareFactory.Create(useDFS: false);
+
+    private object _objA = new { Data = new List<int> { 1, 2, 3 } };
+    private object _objB = new { Data = new List<int> { 1, 2, 3 } };
 
     [Benchmark]
-    public bool CompareObjects() => _comparer.IsEqual(_objA, _objB);
+    public bool CompareUsingDFS() => _dfsComparer.IsEqual(_objA, _objB);
+
+    [Benchmark]
+    public bool CompareUsingReflection() => _reflectionComparer.IsEqual(_objA, _objB);
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        BenchmarkRunner.Run<ComparisonBenchmark>();
+    }
 }
 ```
 
 3. Run the benchmark:
 ```sh
-dotnet run -c Release
+dotnet run --project SharpCompare.Benchmarks -c Release
 ```
 
 ---
