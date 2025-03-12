@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AC737E9F-F33A-46B1-8D4E-29B0E53AC636}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		..\License.txt = ..\License.txt
+		..\README.md = ..\README.md
+		..\SharpCompare_Icon_128x128.png = ..\SharpCompare_Icon_128x128.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCompare.Benchmarks", "..\SharpCompare.Benchmarks\SharpCompare.Benchmarks.csproj", "{4D45E02B-8B18-4088-91D8-57197438CF79}"
