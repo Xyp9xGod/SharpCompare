@@ -9,6 +9,7 @@ A lightweight and efficient library for deep object comparison in C#, designed t
 
 ## Table of Contents 📑
 - [Features](#-features)
+- [Supported and Unsupported Types](#-supportedtypes)
 - [Installation](#-installation)
 - [Usage](#-usage)
   - [Basic Comparison](#basic-object-comparison)
@@ -27,6 +28,28 @@ A lightweight and efficient library for deep object comparison in C#, designed t
 - **Custom Ignore Rules**: Use `[IgnoreComparison]` to exclude properties.
 - **Optimized Performance**: DFS-based traversal with early termination on mismatches.
 - **Benchmark-Ready**: Integrates with `BenchmarkDotNet` for performance analysis.
+
+---
+
+## ✅ Supported and Unsupported Types
+
+### Supported Types
+SharpCompare currently supports the following types:
+- **Primitive Types**: `int`, `float`, `double`, `char`, `bool`, etc.
+- **Strings**
+- **Arrays and Collections**: `List<T>`, `Dictionary<TKey, TValue>`, `HashSet<T>`, `IEnumerable<T>`
+- **Custom Classes and Structs** (including nested objects)
+- **Anonymous Types**
+- **Nullable Types** (`int?`, `DateTime?`, etc.)
+
+### Unsupported Types
+Currently, the following types **are not supported**:
+- **Delegates and Events**
+- **Dynamic Types (`dynamic`)**
+- **Unsafe Code and Pointers**
+- **Circular References in Objects** (may cause stack overflow in DFS mode)
+
+Support for additional types may be added in future releases.
 
 ---
 
@@ -134,28 +157,6 @@ class Program
 ```sh
 dotnet run --project SharpCompare.Benchmarks -c Release
 ```
-
----
-
-## ✅ Supported and Unsupported Types
-
-### Supported Types
-SharpCompare currently supports the following types:
-- **Primitive Types**: `int`, `float`, `double`, `char`, `bool`, etc.
-- **Strings**
-- **Arrays and Collections**: `List<T>`, `Dictionary<TKey, TValue>`, `HashSet<T>`, `IEnumerable<T>`
-- **Custom Classes and Structs** (including nested objects)
-- **Anonymous Types**
-- **Nullable Types** (`int?`, `DateTime?`, etc.)
-
-### Unsupported Types
-Currently, the following types **are not supported**:
-- **Delegates and Events**
-- **Dynamic Types (`dynamic`)**
-- **Unsafe Code and Pointers**
-- **Circular References in Objects** (may cause stack overflow in DFS mode)
-
-Support for additional types may be added in future releases.
 
 ---
 
