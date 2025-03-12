@@ -10,6 +10,7 @@
 	<Version>1.0.2</Version>
 	<Authors>Arilson Silva; Xyp9xGod</Authors>
 	<Company>SharpCompare</Company>
+	<PackageIconUrl>https://github.com/Xyp9xGod/SharpCompare/blob/master/SharpCompare_Icon_128x128.png</PackageIconUrl>
 	<Description>Compare Objects</Description>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<RepositoryUrl>https://github.com/Xyp9xGod/SharpCompare</RepositoryUrl>
