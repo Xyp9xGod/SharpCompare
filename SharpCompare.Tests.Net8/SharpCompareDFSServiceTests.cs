@@ -1,8 +1,9 @@
 ﻿using SharpCompare.Extensions;
-using SharpCompare.Interfaces;
 using SharpCompare.Factory;
+using SharpCompare.Interfaces;
+using Xunit;
 
-namespace SharpCompare.Tests
+namespace SharpCompare.Tests.Net8
 {
     public class SharpCompareDFSServiceTests
     {
@@ -169,6 +170,5 @@ namespace SharpCompare.Tests
 
             Assert.False(result);
         }
-    } 
+    }
 }
-
