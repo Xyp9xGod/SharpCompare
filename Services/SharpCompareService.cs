@@ -7,6 +7,46 @@ namespace SharpCompare.Services
 {
     public class SharpCompareService : ISharpCompare
     {
+        /// <summary>
+        /// Compares two objects by their properties and values, ignoring memory references.
+        /// </summary>
+        /// <param name="firstObject">The first object to compare.</param>
+        /// <param name="secondObject">The second object to compare.</param>
+        /// <returns>
+        /// Returns <c>true</c> if both objects have the same property values; otherwise, returns <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// - Supports deep comparison of nested objects.
+        /// - Can compare collections like lists and dictionaries.
+        /// - Allows ignoring specific properties using the <see cref="IgnoreComparisonAttribute"/>.
+        /// </remarks>
+        /// <example>
+        /// Example usage:
+        /// <code>
+        /// var comparer = new SharpCompareService();
+        /// bool isEqual = comparer.IsEqual(objectA, objectB);
+        /// </code>
+        /// 
+        /// Ignoring properties example:
+        /// <code>
+        /// using SharpCompare;
+        ///
+        /// public class Person
+        /// {
+        ///     public string Name { get; set; }
+        ///     public int Age { get; set; }
+        ///     
+        ///     [IgnoreComparison]
+        ///     public string TemporaryId { get; set; }
+        /// }
+        /// 
+        /// var person1 = new Person { Name = "John", Age = 30, TemporaryId = "ABC123" };
+        /// var person2 = new Person { Name = "John", Age = 30, TemporaryId = "XYZ789" };
+        /// 
+        /// bool result = comparer.IsEqual(person1, person2); // Returns TRUE because TemporaryId is ignored.
+        /// </code>
+        /// </example>
+
         public bool IsEqual(object firstObject, object secondObject)
         {
             if (firstObject == null || secondObject == null)
