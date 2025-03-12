@@ -7,10 +7,11 @@
     
 	<PackageId>SharpCompare</PackageId>
 	<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-	<Version>1.0.2</Version>
+	<Version>1.1.0</Version>
 	<Authors>Arilson Silva; Xyp9xGod</Authors>
 	<Company>SharpCompare</Company>
-	<PackageIconUrl>https://github.com/Xyp9xGod/SharpCompare/blob/master/SharpCompare_Icon_128x128.png</PackageIconUrl>
+	<PackageIcon>SharpCompare_Icon_128x128.png</PackageIcon>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>
 	<Description>Compare Objects</Description>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<RepositoryUrl>https://github.com/Xyp9xGod/SharpCompare</RepositoryUrl>
@@ -18,5 +19,9 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
+	<ItemGroup>
+		<None Include="SharpCompare_Icon_128x128.png" Pack="true" PackagePath="\" />
+		<None Include="readme.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
 </Project>

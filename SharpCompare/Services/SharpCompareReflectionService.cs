@@ -34,7 +34,7 @@ namespace SharpCompare.Services
             return true;
         }
 
-        private bool AreValuesEqual(object value1, object value2)
+        private bool AreValuesEqual(object? value1, object? value2)
         {
             if (value1 == null || value2 == null)
                 return value1 == value2;
