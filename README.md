@@ -137,6 +137,28 @@ dotnet run --project SharpCompare.Benchmarks -c Release
 
 ---
 
+## ✅ Supported and Unsupported Types
+
+### Supported Types
+SharpCompare currently supports the following types:
+- **Primitive Types**: `int`, `float`, `double`, `char`, `bool`, etc.
+- **Strings**
+- **Arrays and Collections**: `List<T>`, `Dictionary<TKey, TValue>`, `HashSet<T>`, `IEnumerable<T>`
+- **Custom Classes and Structs** (including nested objects)
+- **Anonymous Types**
+- **Nullable Types** (`int?`, `DateTime?`, etc.)
+
+### Unsupported Types
+Currently, the following types **are not supported**:
+- **Delegates and Events**
+- **Dynamic Types (`dynamic`)**
+- **Unsafe Code and Pointers**
+- **Circular References in Objects** (may cause stack overflow in DFS mode)
+
+Support for additional types may be added in future releases.
+
+---
+
 ## 📜 License
 This project is licensed under the **MIT License** - see the [LICENSE](https://github.com/Xyp9xGod/SharpCompare/blob/main/License.txt) file for details.
 
