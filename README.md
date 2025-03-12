@@ -1,33 +1,45 @@
-# SharpCompare
+# SharpCompare 🔍
 
-![NuGet](https://www.nuget.org/packages/SharpCompare/)
-![Build](https://img.shields.io/github/actions/workflow/status/seu-repo/sharpcompare/build.yml?style=for-the-badge)
-![License](https://github.com/Xyp9xGod/SharpCompare/blob/CompareObjects/License.txt)
+[![NuGet](https://img.shields.io/nuget/v/SharpCompare.svg)](https://www.nuget.org/packages/SharpCompare/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Xyp9xGod/SharpCompare/blob/main/License.txt)
 
-SharpCompare is a powerful C# library for comparing objects based on their properties and values, ignoring memory references. It supports deep comparisons, collections, and custom rules for ignoring specific properties.
+A lightweight and efficient library for deep object comparison in C#, designed to simplify equality checks without relying on memory references. Perfect for testing, validation, and data synchronization scenarios.
 
-## 🚀 Features
+---
 
-- **Deep comparison** of objects, including nested properties.
-- **Supports collections** like lists and dictionaries.
-- **Efficient comparison using DFS**, stopping early when a difference is found.
-- **Custom property ignoring** via `[IgnoreComparison]` attribute.
-- **Benchmarking support** to compare different comparison strategies.
+## Table of Contents 📑
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+  - [Basic Comparison](#basic-object-comparison)
+  - [Ignoring Properties](#ignoring-specific-properties)
+  - [Collections Comparison](#comparing-collections)
+- [Benchmarking](#-benchmarking)
+- [License](#-license)
+- [Contributing](#-contributing)
+- [Contact](#-contact)
+
+---
+
+## � Features
+- **Deep Object Comparison**: Recursively compare nested properties and fields.
+- **Collection Support**: Works with `IEnumerable`, arrays, dictionaries, and more.
+- **Custom Ignore Rules**: Use `[IgnoreComparison]` to exclude properties.
+- **Optimized Performance**: DFS-based traversal with early termination on mismatches.
+- **Benchmark-Ready**: Integrates with `BenchmarkDotNet` for performance analysis.
 
 ---
 
 ## 📦 Installation
 
-Install via NuGet Package Manager:
-
+Install via **NuGet Package Manager**:
 ```sh
-PM> Install-Package SharpCompare
+PM> NuGet\Install-Package SharpCompare -Version 1.0.1
 ```
 
-Or using .NET CLI:
-
+Or using the **.NET CLI**:
 ```sh
-dotnet add package SharpCompare
+dotnet add package SharpCompare --version 1.0.1
 ```
 
 ---
@@ -35,7 +47,7 @@ dotnet add package SharpCompare
 ## 🔥 Usage
 
 ### Basic Object Comparison
-
+Compare two objects by value:
 ```csharp
 using SharpCompare;
 
@@ -44,79 +56,63 @@ var comparer = new SharpCompareService();
 var obj1 = new { Name = "Alice", Age = 30 };
 var obj2 = new { Name = "Alice", Age = 30 };
 
-bool isEqual = comparer.IsEqual(obj1, obj2); // Returns TRUE
+bool isEqual = comparer.IsEqual(obj1, obj2); // Returns true
 ```
 
 ### Ignoring Specific Properties
-
-Use the `[IgnoreComparison]` attribute to exclude properties from comparison.
-
+Mark properties to ignore with `[IgnoreComparison]`:
 ```csharp
-using SharpCompare;
-
-public class Person
+public class User
 {
     public string Name { get; set; }
-    public int Age { get; set; }
     
-    [IgnoreComparison] // This field will be ignored
-    public string TemporaryId { get; set; }
+    [IgnoreComparison]
+    public Guid SessionId { get; set; } // Ignored during comparison
 }
 
-var person1 = new Person { Name = "John", Age = 30, TemporaryId = "ABC123" };
-var person2 = new Person { Name = "John", Age = 30, TemporaryId = "XYZ789" };
+var user1 = new User { Name = "Alice", SessionId = Guid.NewGuid() };
+var user2 = new User { Name = "Alice", SessionId = Guid.NewGuid() };
 
 var comparer = new SharpCompareService();
-bool result = comparer.IsEqual(person1, person2); // Returns TRUE
+bool result = comparer.IsEqual(user1, user2); // true (SessionId is ignored)
 ```
 
 ### Comparing Collections
-
+Compare lists, dictionaries, and other collections:
 ```csharp
-using SharpCompare;
+var dict1 = new Dictionary<int, string> { { 1, "A" }, { 2, "B" } };
+var dict2 = new Dictionary<int, string> { { 1, "A" }, { 2, "B" } };
 
-var list1 = new List<int> { 1, 2, 3 };
-var list2 = new List<int> { 1, 2, 3 };
-
-var comparer = new SharpCompareService();
-bool isEqual = comparer.IsEqual(list1, list2); // Returns TRUE
+bool areDictionariesEqual = comparer.IsEqual(dict1, dict2); // true
 ```
 
 ---
 
 ## 🏎️ Benchmarking
+Measure performance using `BenchmarkDotNet`:
 
-To compare performance between **Reflection-based** and **DFS-based** comparison, use `BenchmarkDotNet`.
-
+1. Add the benchmarking package:
 ```sh
 dotnet add package BenchmarkDotNet
 ```
 
-Create a benchmark class:
-
+2. Create a benchmark class:
 ```csharp
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
 using SharpCompare;
 
-public class CompareBenchmark
+public class ComparisonBenchmark
 {
-    private readonly SharpCompareService comparer = new();
-    private readonly object obj1 = new { Name = "Alice", Age = 30 };
-    private readonly object obj2 = new { Name = "Alice", Age = 30 };
+    private readonly SharpCompareService _comparer = new();
+    private readonly object _objA = new { Data = new List<int> { 1, 2, 3 } };
+    private readonly object _objB = new { Data = new List<int> { 1, 2, 3 } };
 
     [Benchmark]
-    public void CompareUsingDFS()
-    {
-        comparer.IsEqual(obj1, obj2);
-    }
+    public bool CompareObjects() => _comparer.IsEqual(_objA, _objB);
 }
-
-BenchmarkRunner.Run<CompareBenchmark>();
 ```
 
-Run the benchmark with:
-
+3. Run the benchmark:
 ```sh
 dotnet run -c Release
 ```
@@ -124,18 +120,20 @@ dotnet run -c Release
 ---
 
 ## 📜 License
-
-SharpCompare is licensed under the **MIT License**.
+This project is licensed under the **MIT License** - see the [LICENSE](https://github.com/Xyp9xGod/SharpCompare/blob/main/License.txt) file for details.
 
 ---
 
 ## 🤝 Contributing
+Contributions are welcome! Please:
+1. Fork the repository.
+2. Create a feature branch.
+3. Submit a pull request.
 
-Contributions are welcome! Please open an issue or submit a pull request on GitHub.
+GitHub Repository: [https://github.com/Xyp9xGod/SharpCompare](https://github.com/Xyp9xGod/SharpCompare)
 
 ---
 
 ## 📫 Contact
-
-For questions or suggestions, open an issue or reach out on LinkedIn.
-
+- **Issues & Suggestions**: [GitHub Issues](https://github.com/Xyp9xGod/SharpCompare/issues)
+- **LinkedIn**: [Arilson Silva](https://www.linkedin.com/in/arilsonsilva/)
