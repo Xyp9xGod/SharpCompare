@@ -15,6 +15,7 @@ A lightweight and efficient library for deep object comparison in C#, designed t
   - [Basic Comparison](#basic-object-comparison)
   - [Ignoring Properties](#ignoring-specific-properties)
   - [Collections Comparison](#comparing-collections)
+  - [Difference Detection](#detecting-differences)
 - [Benchmarking](#-benchmarking)
 - [License](#-license)
 - [Contributing](#-contributing)
@@ -27,6 +28,7 @@ A lightweight and efficient library for deep object comparison in C#, designed t
 - **Collection Support**: Works with `IEnumerable`, arrays, dictionaries, and more.
 - **Custom Ignore Rules**: Use `[IgnoreComparison]` to exclude properties.
 - **Optimized Performance**: DFS-based traversal with early termination on mismatches.
+- **Difference Detection**: Identify specific property differences in objects.
 - **Benchmark-Ready**: Integrates with `BenchmarkDotNet` for performance analysis.
 
 ---
@@ -57,12 +59,12 @@ Support for additional types may be added in future releases.
 
 Install via **NuGet Package Manager**:
 ```sh
-PM> NuGet\Install-Package SharpCompare -Version 1.0.2
+PM> NuGet\Install-Package SharpCompare -Version 1.1.1
 ```
 
 Or using the **.NET CLI**:
 ```sh
-dotnet add package SharpCompare --version 1.0.2
+dotnet add package SharpCompare --version 1.1.1
 ```
 
 ---
@@ -111,6 +113,20 @@ var dict1 = new Dictionary<int, string> { { 1, "A" }, { 2, "B" } };
 var dict2 = new Dictionary<int, string> { { 1, "A" }, { 2, "B" } };
 
 bool areDictionariesEqual = comparer.IsEqual(dict1, dict2); // true
+```
+
+### Detecting Differences
+Identify specific differences between two objects:
+```csharp
+var comparer = SharpCompareFactory.Create();
+
+var person1 = new Person { Name = "Alice", Age = 30 };
+var person2 = new Person { Name = "Bob", Age = 35 };
+
+var differences = comparer.GetDifferences(person1, person2);
+
+// Output:
+// ["Name: Alice → Bob", "Age: 30 → 35"]
 ```
 
 ---

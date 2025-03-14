@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SharpCompare.Services
 {
-    public class SharpCompareReflectionService : ISharpCompare
+    internal class SharpCompareReflectionService : ISharpCompare
     {
         public bool IsEqual(object firstObject, object secondObject)
         {
@@ -32,6 +32,57 @@ namespace SharpCompare.Services
             }
 
             return true;
+        }
+
+        public List<string> GetDifferences(object firstObject, object secondObject, string path = "")
+        {
+            var differences = new List<string>();
+
+            if (firstObject == null || secondObject == null)
+            {
+                if (firstObject != secondObject)
+                    differences.Add($"{path}: {firstObject} → {secondObject}");
+                return differences;
+            }
+
+            if (firstObject.GetType() != secondObject.GetType())
+            {
+                if (string.IsNullOrEmpty(path))
+                    differences.Add("Objects are of different types");
+                else
+                    differences.Add($"{path}: Objects are of different types");
+
+                return differences;
+            }
+
+            var type = firstObject.GetType();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var prop in properties)
+            {
+                var value1 = prop.GetValue(firstObject);
+                var value2 = prop.GetValue(secondObject);
+                string propertyPath = string.IsNullOrEmpty(path) ? prop.Name : $"{path}.{prop.Name}";
+
+                if (value1 == null || value2 == null)
+                {
+                    if (value1 != value2)
+                        differences.Add($"{propertyPath}: {value1} → {value2}");
+                    continue;
+                }
+
+                if (prop.PropertyType.IsPrimitive || prop.PropertyType.IsValueType || value1 is string || value1 is decimal)
+                {
+                    if (!value1.Equals(value2))
+                        differences.Add($"{propertyPath}: {value1} → {value2}");
+                }
+                else
+                {
+                    differences.AddRange(GetDifferences(value1, value2, propertyPath));
+                }
+            }
+
+            return differences;
         }
 
         private bool AreValuesEqual(object? value1, object? value2)
