@@ -1,6 +1,6 @@
-﻿using SharpCompare.Extensions;
-using SharpCompare.Factory;
+﻿using SharpCompare.Factory;
 using SharpCompare.Interfaces;
+using SharpCompare.Models;
 using Xunit;
 
 namespace SharpCompare.Tests.Net8
@@ -8,22 +8,6 @@ namespace SharpCompare.Tests.Net8
     public class SharpCompareDFSServiceTests
     {
         private readonly ISharpCompare _comparer = SharpCompareFactory.Create(useDFS: true);
-
-        private class Person
-        {
-            public string Name { get; set; }
-            public int Age { get; set; }
-            public Address Address { get; set; }
-
-            [IgnoreComparison]
-            public string Ignored { get; set; }
-        }
-
-        private class Address
-        {
-            public string Street { get; set; }
-            public int Number { get; set; }
-        }
 
         [Fact]
         public void ObjectsAreEqual_ShouldReturnTrue()
@@ -50,8 +34,8 @@ namespace SharpCompare.Tests.Net8
         [Fact]
         public void ObjectsWithIgnoredProperty_ShouldBeEqual()
         {
-            var person1 = new Person { Name = "John", Age = 30, Ignored = "Value1" };
-            var person2 = new Person { Name = "John", Age = 30, Ignored = "Value2" };
+            var person1 = new Person { Name = "John", Age = 30, Password = "Value1" };
+            var person2 = new Person { Name = "John", Age = 30, Password = "Value2" };
 
             bool result = _comparer.IsEqual(person1, person2);
 

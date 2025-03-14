@@ -7,20 +7,6 @@ namespace SharpCompare.Services
 {
     internal class SharpCompareDFSService : ISharpCompare
     {
-        /// <summary>
-        /// Compares two objects by their properties and values, ignoring memory references.
-        /// </summary>
-        /// <param name="firstObject">The first object to compare.</param>
-        /// <param name="secondObject">The second object to compare.</param>
-        /// <returns>
-        /// Returns <c>true</c> if both objects have the same property values; otherwise, returns <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// - Supports deep comparison of nested objects.
-        /// - Can compare collections like lists and dictionaries.
-        /// - Allows ignoring specific properties using the <see cref="IgnoreComparisonAttribute"/>.
-        /// </remarks>
-
         public bool IsEqual(object firstObject, object secondObject)
         {
             if (firstObject == null || secondObject == null)
@@ -75,6 +61,66 @@ namespace SharpCompare.Services
             }
 
             return true;
+        }
+
+        public List<string> GetDifferences(object firstObject, object secondObject, string path = "")
+        {
+            var differences = new List<string>();
+            var stack = new Stack<(object firstObject, object secondObject, string path)>();
+            stack.Push((firstObject, secondObject, path));
+
+            while (stack.Count > 0)
+            {
+                var (firstObj, secondObj, currentPath) = stack.Pop();
+
+                if (firstObj == null || secondObj == null)
+                {
+                    if (firstObj != secondObj)
+                        differences.Add($"{currentPath}: {firstObj?.ToString() ?? "null"} → {secondObj?.ToString() ?? "null"}");
+                    continue;
+                }
+
+                if (firstObj.GetType() != secondObj.GetType())
+                {
+                    if (string.IsNullOrEmpty(currentPath))
+                        differences.Add("Objects are of different types");
+                    else
+                        differences.Add($"{currentPath}: Objects are of different types");
+
+                    continue;
+                }
+
+                var type = firstObj.GetType();
+                if (type.IsPrimitive || firstObj is string || firstObj is decimal)
+                {
+                    if (!firstObj.Equals(secondObj))
+                        differences.Add($"{currentPath}: {firstObj} → {secondObj}");
+                    continue;
+                }
+
+                if (typeof(IEnumerable).IsAssignableFrom(type) && firstObj is IEnumerable firstEnumerable && secondObj is IEnumerable secondEnumerable)
+                {
+                    var list1 = firstEnumerable.Cast<object>().ToList();
+                    var list2 = secondEnumerable.Cast<object>().ToList();
+                    for (int i = 0; i < Math.Max(list1.Count, list2.Count); i++)
+                    {
+                        var item1 = i < list1.Count ? list1[i] : "MISSING";
+                        var item2 = i < list2.Count ? list2[i] : "MISSING";
+                        stack.Push((item1, item2, $"{currentPath}[{i}]"));
+                    }
+                    continue;
+                }
+
+                foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    var value1 = prop.GetValue(firstObj);
+                    var value2 = prop.GetValue(secondObj);
+                    string propertyPath = string.IsNullOrEmpty(currentPath) ? prop.Name : $"{currentPath}.{prop.Name}";
+                    stack.Push((value1, value2, propertyPath));
+                }
+            }
+
+            return differences;
         }
 
         private bool CompareCollections(IEnumerable firstCollection, IEnumerable secondCollection)

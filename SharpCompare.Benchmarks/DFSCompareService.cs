@@ -63,6 +63,11 @@ namespace SharpCompare.Benchmarks
             return true;
         }
 
+        public List<string> GetDifferences(object firstObject, object secondObject, string path = "")
+        {
+            throw new NotImplementedException();
+        }
+
         private bool CompareCollections(IEnumerable firstCollection, IEnumerable secondCollection)
         {
             var firstList = firstCollection.Cast<object>().ToList();

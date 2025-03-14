@@ -7,6 +7,11 @@ namespace SharpCompare.Benchmarks
 {
     internal class ReflectionCompareService : ISharpCompare
     {
+        public List<string> GetDifferences(object firstObject, object secondObject, string path = "")
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsEqual(object firstObject, object secondObject)
         {
             if (firstObject == null || secondObject == null)
