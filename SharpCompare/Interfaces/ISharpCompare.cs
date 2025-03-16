@@ -37,5 +37,35 @@
         /// - Useful for debugging and data validation.
         /// </remarks>
         List<string> GetDifferences(object firstObject, object secondObject, string path = "");
+
+        /// <summary>
+        /// Compares two objects by serializing them into JSON and checking if the resulting JSON strings are equal.
+        /// </summary>
+        /// <param name="firstObject">The first object to compare.</param>
+        /// <param name="secondObject">The second object to compare.</param>
+        /// <returns>
+        /// Returns <c>true</c> if both objects serialize to identical JSON; otherwise, returns <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// - Uses JSON serialization to normalize the object structure before comparison.
+        /// - Ignores memory references and focuses purely on data values.
+        /// - Useful for scenarios where the serialization format is critical.
+        /// </remarks>
+        bool IsEqualJson(object firstObject, object secondObject);
+
+        /// <summary>
+        /// Compares two objects by computing a cryptographic hash of their serialized JSON representation.
+        /// </summary>
+        /// <param name="firstObject">The first object to compare.</param>
+        /// <param name="secondObject">The second object to compare.</param>
+        /// <returns>
+        /// Returns <c>true</c> if both objects produce the same hash; otherwise, returns <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// - Uses SHA-256 to generate a hash from the JSON-serialized object.
+        /// - Efficient for checking if objects have the same content without direct value comparisons.
+        /// - Particularly useful for caching, deduplication, or integrity validation scenarios.
+        /// </remarks>
+        bool CompareByHash(object firstObject, object secondObject);
     }
 }

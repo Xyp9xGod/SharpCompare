@@ -16,6 +16,8 @@ A lightweight and efficient library for deep object comparison in C#, designed t
   - [Ignoring Properties](#ignoring-specific-properties)
   - [Collections Comparison](#comparing-collections)
   - [Difference Detection](#detecting-differences)
+  - [JSON-Based Comparison](#json-based-comparison)
+  - [Hash-Based Comparison](#hash-based-comparison)
 - [Benchmarking](#-benchmarking)
 - [License](#-license)
 - [Contributing](#-contributing)
@@ -29,6 +31,8 @@ A lightweight and efficient library for deep object comparison in C#, designed t
 - **Custom Ignore Rules**: Use `[IgnoreComparison]` to exclude properties.
 - **Optimized Performance**: DFS-based traversal with early termination on mismatches.
 - **Difference Detection**: Identify specific property differences in objects.
+- **JSON-Based Comparison**: Convert objects to JSON and compare their structures.
+- **Hash-Based Comparison**: Generate unique hashes for objects and compare them.
 - **Benchmark-Ready**: Integrates with `BenchmarkDotNet` for performance analysis.
 
 ---
@@ -59,12 +63,12 @@ Support for additional types may be added in future releases.
 
 Install via **NuGet Package Manager**:
 ```sh
-PM> NuGet\Install-Package SharpCompare -Version 1.1.1
+PM> NuGet\Install-Package SharpCompare -Version 1.1.2
 ```
 
 Or using the **.NET CLI**:
 ```sh
-dotnet add package SharpCompare --version 1.1.1
+dotnet add package SharpCompare --version 1.1.2
 ```
 
 ---
@@ -129,6 +133,28 @@ var differences = comparer.GetDifferences(person1, person2);
 // ["Name: Alice → Bob", "Age: 30 → 35"]
 ```
 
+### JSON-Based Comparison
+Compare objects after converting them to JSON:
+```csharp
+var comparer = SharpCompareFactory.Create();
+
+var obj1 = new { Name = "Alice", Age = 30 };
+var obj2 = new { Name = "Alice", Age = 30 };
+
+bool isJsonEqual = comparer.IsEqualJson(obj1, obj2); // true
+```
+
+### Hash-Based Comparison
+Compare objects by generating unique hashes:
+```csharp
+var comparer = SharpCompareFactory.Create();
+
+var obj1 = new { Name = "Alice", Age = 30 };
+var obj2 = new { Name = "Alice", Age = 30 };
+
+bool isHashEqual = comparer.CompareByHash(obj1, obj2); // true
+```
+
 ---
 
 ## 🏎️ Benchmarking
@@ -139,37 +165,7 @@ Measure performance using `BenchmarkDotNet`:
 dotnet add package BenchmarkDotNet
 ```
 
-2. Create a benchmark class:
-```csharp
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using SharpCompare;
-
-public class ComparisonBenchmark
-{
-    private readonly ISharpCompare _dfsComparer = SharpCompareFactory.Create(useDFS: true);
-    private readonly ISharpCompare _reflectionComparer = SharpCompareFactory.Create(useDFS: false);
-
-    private object _objA = new { Data = new List<int> { 1, 2, 3 } };
-    private object _objB = new { Data = new List<int> { 1, 2, 3 } };
-
-    [Benchmark]
-    public bool CompareUsingDFS() => _dfsComparer.IsEqual(_objA, _objB);
-
-    [Benchmark]
-    public bool CompareUsingReflection() => _reflectionComparer.IsEqual(_objA, _objB);
-}
-
-class Program
-{
-    static void Main(string[] args)
-    {
-        BenchmarkRunner.Run<ComparisonBenchmark>();
-    }
-}
-```
-
-3. Run the benchmark:
+2. Run benchmarks:
 ```sh
 dotnet run --project SharpCompare.Benchmarks -c Release
 ```

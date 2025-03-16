@@ -84,5 +84,15 @@ namespace SharpCompare.Benchmarks
 
             return true;
         }
+
+        public bool IsEqualJson(object firstObject, object secondObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CompareByHash(object firstObject, object secondObject)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

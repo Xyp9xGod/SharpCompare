@@ -7,6 +7,11 @@ namespace SharpCompare.Benchmarks
 {
     internal class ReflectionCompareService : ISharpCompare
     {
+        public bool CompareByHash(object firstObject, object secondObject)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<string> GetDifferences(object firstObject, object secondObject, string path = "")
         {
             throw new NotImplementedException();
@@ -37,6 +42,11 @@ namespace SharpCompare.Benchmarks
             }
 
             return true;
+        }
+
+        public bool IsEqualJson(object firstObject, object secondObject)
+        {
+            throw new NotImplementedException();
         }
 
         private bool AreValuesEqual(object value1, object value2)

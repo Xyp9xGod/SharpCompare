@@ -1,13 +1,12 @@
 ﻿using SharpCompare.Extensions;
-using SharpCompare.Interfaces;
 using System.Collections;
 using System.Reflection;
 
 namespace SharpCompare.Services
 {
-    internal class SharpCompareDFSService : ISharpCompare
+    internal class SharpCompareDFSService : SharpCompareBaseService
     {
-        public bool IsEqual(object firstObject, object secondObject)
+        public override bool IsEqual(object firstObject, object secondObject)
         {
             if (firstObject == null || secondObject == null)
                 return firstObject == secondObject;
@@ -63,7 +62,7 @@ namespace SharpCompare.Services
             return true;
         }
 
-        public List<string> GetDifferences(object firstObject, object secondObject, string path = "")
+        public override List<string> GetDifferences(object firstObject, object secondObject, string path = "")
         {
             var differences = new List<string>();
             var stack = new Stack<(object firstObject, object secondObject, string path)>();
@@ -95,6 +94,29 @@ namespace SharpCompare.Services
                 {
                     if (!firstObj.Equals(secondObj))
                         differences.Add($"{currentPath}: {firstObj} → {secondObj}");
+                    continue;
+                }
+
+                if (firstObj is IDictionary firstDict && secondObj is IDictionary secondDict)
+                {
+                    foreach (var key in firstDict.Keys.Cast<object>().Union(secondDict.Keys.Cast<object>()))
+                    {
+                        string? keyPath = string.IsNullOrEmpty(currentPath) ? key.ToString() : $"{currentPath}.{key}";
+
+                        if (!firstDict.Contains(key))
+                        {
+                            differences.Add($"{keyPath}: Missing in first dictionary");
+                            continue;
+                        }
+
+                        if (!secondDict.Contains(key))
+                        {
+                            differences.Add($"{keyPath}: Missing in second dictionary");
+                            continue;
+                        }
+
+                        stack.Push((firstDict[key], secondDict[key], keyPath));
+                    }
                     continue;
                 }
 
