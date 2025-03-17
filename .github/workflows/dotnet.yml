@@ -3,10 +3,10 @@ name: CI/CD - SharpCompare
 on:
   push:
     tags:
-      - "v*.*.*"  # Trigger when a new tag vX.Y.Z is created
+      - "v*.*.*"
   pull_request:
     branches:
-      - master  # Mudança de 'main' para 'master'
+      - master
 
 jobs:
   build-test:
@@ -20,10 +20,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install .NET ${{ matrix.dotnet }}
+      - name: Install .NET versions
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: |
+            8.0.x
+            9.0.x  # Garante que o SDK do .NET 9 está instalado
+
+      - name: Verify installed SDKs
+        run: dotnet --list-sdks  # Exibe quais versões do .NET estão instaladas
 
       - name: Restore dependencies
         run: dotnet restore SharpCompare.sln
