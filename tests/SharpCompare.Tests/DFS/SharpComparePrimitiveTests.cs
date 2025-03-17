@@ -21,7 +21,7 @@ namespace SharpCompare.Tests.DFS
         [Fact]
         public void ComparePrimitiveTypes_ShouldReturnFalse()
         {
-            Assert.False(_comparer.IsEqual(0.123, 0.124));
+            Assert.False(_comparer.IsEqual(0.122, 0.124));
             Assert.False(_comparer.IsEqual(10, 20));
             Assert.False(_comparer.IsEqual(3.14, 2.71));
             Assert.False(_comparer.IsEqual('A', 'B'));

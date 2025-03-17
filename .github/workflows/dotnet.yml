@@ -6,7 +6,7 @@ on:
       - "v*.*.*"  # Trigger when a new tag vX.Y.Z is created
   pull_request:
     branches:
-      - main  # Run build and tests on pull requests targeting the main branch
+      - master  # Mudança de 'main' para 'master'
 
 jobs:
   build-test:
