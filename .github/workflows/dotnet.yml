@@ -25,7 +25,7 @@ jobs:
         with:
           dotnet-version: |
             8.0.x
-            9.0.x  # Garante que o SDK do .NET 9 está instalado
+            9.0.0
 
       - name: Verify installed SDKs
         run: dotnet --list-sdks  # Exibe quais versões do .NET estão instaladas
@@ -54,7 +54,7 @@ jobs:
         with:
           dotnet-version: |
             8.0.x
-            9.0.x
+            9.0.0
 
       - name: Extract version from tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
