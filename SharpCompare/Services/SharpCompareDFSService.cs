@@ -6,6 +6,8 @@ namespace SharpCompare.Services
 {
     internal class SharpCompareDFSService : SharpCompareBaseService
     {
+        private static readonly Dictionary<Type, PropertyInfo[]> _propertyCache = new();
+
         public override bool IsEqual(object firstObject, object secondObject)
         {
             if (firstObject == null || secondObject == null)
@@ -14,7 +16,9 @@ namespace SharpCompare.Services
             if (firstObject.GetType() != secondObject.GetType())
                 return false;
 
-            var stack = new Stack<(object, object)>();
+            var stack = new Stack<ValueTuple<object, object>>();
+            var visited = new HashSet<ValueTuple<object, object>>();
+
             stack.Push((firstObject, secondObject));
 
             while (stack.Count > 0)
@@ -27,22 +31,53 @@ namespace SharpCompare.Services
                     continue;
                 }
 
+                if (ReferenceEquals(obj1, obj2))
+                    continue;
+
                 if (obj1.GetType().IsPrimitive || obj1 is string)
                 {
                     if (!obj1.Equals(obj2)) return false;
                     continue;
                 }
 
+                // Avoid redundant comparisons
+                var pair = (obj1, obj2);
+                if (visited.Contains(pair))
+                    continue;
+                visited.Add(pair);
+
                 if (obj1 is IEnumerable firstEnumerable && obj2 is IEnumerable secondEnumerable)
                 {
-                    if (!CompareCollections(firstEnumerable, secondEnumerable))
-                        return false;
+                    var enumerator1 = firstEnumerable.GetEnumerator();
+                    var enumerator2 = secondEnumerable.GetEnumerator();
+
+                    try
+                    {
+                        while (enumerator1.MoveNext() && enumerator2.MoveNext())
+                        {
+                            stack.Push((enumerator1.Current, enumerator2.Current));
+                        }
+
+                        if (enumerator1.MoveNext() || enumerator2.MoveNext())
+                            return false;
+                    }
+                    finally
+                    {
+                        (enumerator1 as IDisposable)?.Dispose();
+                        (enumerator2 as IDisposable)?.Dispose();
+                    }
+
                     continue;
                 }
 
-                var properties = obj1.GetType()
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(p => !Attribute.IsDefined(p, typeof(IgnoreComparisonAttribute)));
+                var type = obj1.GetType();
+                if (!_propertyCache.TryGetValue(type, out var properties))
+                {
+                    properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        .Where(p => !Attribute.IsDefined(p, typeof(IgnoreComparisonAttribute)))
+                        .ToArray();
+                    _propertyCache[type] = properties;
+                }
 
                 foreach (var property in properties)
                 {
