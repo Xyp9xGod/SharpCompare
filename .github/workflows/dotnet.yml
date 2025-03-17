@@ -1,12 +1,19 @@
 name: CI/CD - SharpCompare
 
+permissions:
+  statuses: write
+  checks: write
+  contents: write
+  pull-requests: write
+  actions: write
+
 on:
   push:
     tags:
-      - "v*.*.*"
+      - "v*.*.*"  # Trigger when a new tag vX.Y.Z is created
   pull_request:
     branches:
-      - master
+      - master 
 
 jobs:
   build-test:
@@ -14,30 +21,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '8.0.x', '9.0.x' ]  # Test against .NET 8 and .NET 9
+        dotnet: [ '8.0.x', '9.0.0' ]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Atualizado para versão mais recente
 
-      - name: Install .NET versions
-        uses: actions/setup-dotnet@v3
+      - name: Install .NET ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
-            9.0.x  # Garante que o SDK do .NET 9 está instalado
-
-      - name: Verify installed SDKs
-        run: dotnet --list-sdks  # Exibe quais versões do .NET estão instaladas
+          dotnet-version: ${{ matrix.dotnet }}
 
       - name: Restore dependencies
-        run: dotnet restore SharpCompare.sln
+        run: |
+          dotnet restore src/SharpCompare/SharpCompare.csproj
+          dotnet restore tests/SharpCompare.Tests/SharpCompare.Tests.csproj
 
       - name: Build the project
-        run: dotnet build SharpCompare.sln --configuration Release --no-restore
+        run: |
+          dotnet build src/SharpCompare/SharpCompare.csproj --configuration Release --no-restore
+          dotnet build tests/SharpCompare.Tests/SharpCompare.Tests.csproj --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test SharpCompare.sln --configuration Release --no-restore --verbosity normal
+        run: dotnet test tests/SharpCompare.Tests/SharpCompare.Tests.csproj --configuration Release --no-restore --verbosity normal
 
   publish:
     name: Publish to NuGet
@@ -47,14 +53,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install .NET 8 and 9
-        uses: actions/setup-dotnet@v3
+      - name: Install .NET 9.0
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
-            9.0.x
+          dotnet-version: 9.0.0
 
       - name: Extract version from tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
