@@ -26,13 +26,13 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore SharpCompare.sln
 
       - name: Build the project
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build SharpCompare.sln --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test --configuration Release --no-restore --verbosity normal
+        run: dotnet test SharpCompare.sln --configuration Release --no-restore --verbosity normal
 
   publish:
     name: Publish to NuGet
@@ -55,7 +55,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Package NuGet with version
-        run: dotnet pack src/SharpCompare --configuration Release --output nupkg /p:Version=${{ env.VERSION }}
+        run: dotnet pack src/SharpCompare/SharpCompare.csproj --configuration Release --output nupkg /p:Version=${{ env.VERSION }}
 
       - name: Publish to NuGet
         run: dotnet nuget push nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
