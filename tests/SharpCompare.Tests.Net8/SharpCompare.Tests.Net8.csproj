@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SharpCompare\SharpCompare.csproj" />
+	  <ProjectReference Include="..\..\src\SharpCompare\SharpCompare.csproj" />
 	</ItemGroup>
 
 </Project>
