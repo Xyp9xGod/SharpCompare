@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+	<PackageId>SharpCompare</PackageId>
+	<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+	<Version>1.2.0</Version>
+	<Authors>Arilson Silva; Xyp9xGod</Authors>
+	<Company>SharpCompare</Company>
+	<PackageIcon>SharpCompare_Icon_128x128.png</PackageIcon>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>
+	<Description>Compare Objects</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<RepositoryUrl>https://github.com/Xyp9xGod/SharpCompare</RepositoryUrl>
+	<PackageProjectUrl>https://www.nuget.org/packages/SharpCompare</PackageProjectUrl>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Include="SharpCompare_Icon_128x128.png" Pack="true" PackagePath="\" />
+		<None Include="readme.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>
